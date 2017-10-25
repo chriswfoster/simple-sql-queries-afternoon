@@ -1,0 +1,69 @@
+{\rtf1\ansi\ansicpg1252\cocoartf1504\cocoasubrtf830
+{\fonttbl\f0\fswiss\fcharset0 Helvetica;}
+{\colortbl;\red255\green255\blue255;}
+{\*\expandedcolortbl;;}
+\margl1440\margr1440\vieww10800\viewh8400\viewkind0
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+
+\f0\fs24 \cf0 /* CREATE TABLE Person (\
+id INTEGER PRIMARY KEY AUTOINCREMENT,\
+Name string,\
+Age integer,\
+  Height integer,\
+  City string,\
+  FavoriteColor string)*/\
+/* INSERT INTO Person (Name, Age, Height, City, FavoriteColor)\
+values("April", 23423, 23423, "Gotham", "Pink") */\
+/* SELECT Height FROM Person ORDER BY Height desc */\
+/* SELECT Height FROM Person ORDER BY Height asc */\
+/* SELECT Age FROM Person ORDER BY Age desc */\
+/* SELECT Age FROM Person WHERE age > 20; */\
+/* SELECT Age FROM Person WHERE Age = 20; */\
+/* SELECT Age FROM Person WHERE Age > 20 and Age < 30; */\
+/* SELECT Age FROM Person WHERE Age != 27; */\
+/* SELECT FavoriteColor FROM Person WHERE FavoriteColor != "red"; */\
+/* SELECT FavoriteColor FROM Person WHERE FavoriteColor !="red" and FavoriteColor !="blue"; */\
+/* SELECT FavoriteColor FROM Person WHERE FavoriteColor = "orange" or FavoriteColor="green"; */\
+/* SELECT FavoriteColor FROM Person WHERE FavoriteColor IN ("orange", "green", "blue"); */\
+/* SELECT FavoriteColor FROM Person WHERE FavoriteColor IN ("yellow", "purple"); */\
+\
+/* CREATE TABLE Orders(\
+  PersonID INTEGER PRIMARY KEY AUTOINCREMENT,\
+  ProductName string,\
+ProductPrice string,\
+  Quantity integer) */\
+/*   INSERT INTO Orders (ProductName, ProductPrice, Quantity)\
+  values("Goose", 8.99, 3),\
+("Shark", 10000, 1),\
+("toiletpaper", 1.99, 10),\
+("TnT", 20000, 33),\
+("Applesauce", 3.55, 2); */\
+/* SELECT * FROM Orders */\
+/* SELECT SUM(Quantity) FROM Orders */\
+/* SELECT sum(ProductPrice) FROM Orders */\
+/* SELECT sum(ProductPrice * Quantity) FROM Orders WHERE PersonID = 1 */\
+\
+/* INSERT INTO Artist (Name)\
+VALUES ("The Bros"),\
+("That one band"),\
+("Them dudes"),\
+("Rock and roll bros"); */\
+/* SELECT * FROM Artist ORDER BY Name desc LIMIT 10 */\
+/* SELECT * FROM Artist ORDER BY Name asc LIMIT 5 */\
+/* SELECT * From Artist WHERE Name LIKE 'Black%' */\
+/* SELECT * From Artist WHERE Name LIKE '%Black%' */\
+\
+/* SELECT * FROM Employee WHERE City = "Calgary" */\
+/* SELECT * FROM Employee ORDER BY BirthDate desc LIMIT 1 */\
+/* SELECT * FROM Employee ORDER BY BirthDate Asc Limit 1 */\
+/* SELECT * FROM Employee WHERE ReportsTo = 2; */\
+/* SELECT COUNT(City) FROM Employee WHERE CITY = "Lethbridge" */\
+\
+/* SELECT COUNT(BillingCountry) FROM Invoice WHERE BillingCountry = "USA" */\
+/* SELECT MAX(Total) From Invoice */\
+/* SELECT MIN(Total) FROM Invoice */\
+/* SELECT * FROM Invoice WHERE Total > 5 */\
+/* SELECT COUNT(Total) From Invoice WHERE Total < 5; */\
+/* SELECT COUNT(BillingState) FROM Invoice WHERE BillingState IN ("CA", "TX", "AZ"); */\
+/* SELECT AVG(Total) FROM Invoice; */\
+/* SELECT SUM(Total) FROM Invoice; */}
