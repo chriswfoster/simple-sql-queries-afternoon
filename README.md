@@ -2,501 +2,705 @@
 
 # Project Summary
 
-In this project we will be practicing inserting and querying data using SQL. We'll make use of a handy online tool called Chinook that we'll use to write SQL online. <a href="http://jxs.me/chinook-web/">Click me</a>
+In this project, we are going to make our first full CRUD back-end that uses a database.
 
-On the left are the Tables with their fields, the right is where we will be writing our queries, and the bottom is where we will see our results.  
+## Step 1
 
-Any new tables or records that we add into the database will be removed after you refresh the page.
+### Summary
 
-Use [www.sqlteaching.com](http://www.sqlteaching.com/) or [sqlbolt.com](http://sqlbolt.com/) as resources for the missing keywords you'll need.
-
-## Table - People
+In this step, we are going to create a bare-bones server.
 
 ### Instructions
-1. Create a table called Person that records a person's ID, Name, Age, Height ( in cm ), City, FavoriteColor. 
-    * ID should be an auto-incrementing id/primary key - Use type: INTEGER PRIMARY KEY AUTOINCREMENT
-2. Add 5 different people into the Person database. 
-    * Remember to not include the ID because it should auto-increment.
-3. List all the people in the Person table by Height from tallest to shortest.
-4. List all the people in the Person table by Height from shortest to tallest.
-5. List all the people in the Person table by Age from oldest to youngest.
-6. List all the people in the Person table older than age 20.
-7. List all the people in the Person table that are exactly 18.
-8. List all the people in the Person table that are less than 20 and older than 30.
-9. List all the people in the Person table that are not 27 (Use not equals).
-10. List all the people in the Person table where their favorite color is not red.
-11. List all the people in the Person table where their favorite color is not red and is not blue.
-12. List all the people in the Person table where their favorite color is orange or green.
-13. List all the people in the Person table where their favorite color is orange, green or blue (use IN).
-14. List all the people in the Person table where their favorite color is yellow or purple (use IN).
+
+* Run `npm init -y`.
+* Use npm to install and save `express`, `body-parser`, `cors`, `dotenv` and `massive`.
+* Create a `.env` file.
+* Create a `.gitignore` to ignore the `node_modules` folder and the `.env` file.
+* Create an `index.js` file.
+* Require all the packages that we installed and saved.
+* Get your server listening on port `3000`.
+
+<details>
+
+<summary> Detailed Instructions </summary>
+
+<br />
+
+Let's begin by opening a new terminal window and `cd` into the project. Let's create a `package.json` file by running `npm init -y`. Using the `-y` flag, we'll get a package.json file with all the default values. Now that we have a `package.json` file, we can use `npm install --save` to install and save packages to it. Run `npm install --save express body-parser cors massive dotenv` to get all the packages we'll need for this project.
+
+After that is finished, we can see it created a `node_modules` folder. We never want to include this folder on GitHub, so let's create a `.gitignore` that will ignore `node_modules`. Create a file and name it `.env`. This file also needs to be included in the `.gitignore`. After that, we're ready to start creating our server. Create an `index.js` file and `require` all the packages we install at the top.
+
+```js
+const express = require('express');
+const bodyParser = require('body-parser');
+const cors = require('cors');
+const massive = require('massive');
+require('dotenv').config()
+```
+
+Now that our `index.js` file has access to all our packages, let's create a basic server. We'll begin by saving `express()` to a variable called `app`.
+
+```js
+const express = require('express');
+const bodyParser = require('body-parser');
+const cors = require('cors');
+const massive = require('massive');
+require('dotenv').config()
+
+const app = express();
+```
+
+Then, we'll want to use our `bodyParser` and `cors` middleware.
+
+```js
+const express = require('express');
+const bodyParser = require('body-parser');
+const cors = require('cors');
+const massive = require('massive');
+require('dotenv').config()
+
+const app = express();
+app.use( bodyParser.json() );
+app.use( cors() );
+```
+
+Finally, we'll want to tell the server to listen on port `3000` and use a `console.log` to tell us when it is listening.
+
+```js
+const express = require('express');
+const bodyParser = require('body-parser');
+const cors = require('cors');
+const massive = require('massive');
+require('dotenv').config()
+
+const app = express();
+app.use( bodyParser.json() );
+app.use( cors() );
+
+const port = process.env.PORT || 3000;
+app.listen( port, () => { console.log(`Server listening on port ${port}.`); } );
+```
+
+</details>
 
 ### Solution
 
 <details>
 
-<summary> <code> SQL Solutions </code> </summary>
+<summary> <code> .gitignore </code> </summary>
 
-<details>
-
-<summary> <code> #1 </code> </summary>
-
-```sql
-CREATE TABLE Person ( ID INTEGER PRIMARY KEY AUTOINCREMENT, Name string, Age integer, Height integer, City string, FavoriteColor string );
+```
+node_modules
+.env
 ```
 
 </details>
 
 <details>
 
-<summary> <code> #2 </code> </summary>
+<summary> <code> index.js </code> </summary>
 
-```sql
-INSERT INTO Person ( Name, Age, Height, City, FavoriteColor ) VALUES ( "First Last", 21, 182, "City", "Color" );
+```js
+const express = require('express');
+const bodyParser = require('body-parser');
+const cors = require('cors');
+const massive = require('massive');
+require('dotenv').config()
+
+const app = express();
+app.use( bodyParser.json() );
+app.use( cors() );
+
+const port = process.env.PORT || 3000;
+app.listen( port, () => { console.log(`Server listening on port ${port}.`); } );
 ```
 
 </details>
 
-<details>
+## Step 2
 
-<summary> <code> #3 </code> </summary>
+### Summary
 
-```sql
-SELECT * FROM Person ORDER BY Height DESC;
-```
-
-</details>
-
-<details>
-
-<summary> <code> #4 </code> </summary>
-
-```sql
-SELECT * FROM Person ORDER BY Height ASC;
-```
-
-</details>
-
-<details>
-
-<summary> <code> #5 </code> </summary>
-
-```sql
-SELECT * FROM Person ORDER BY Age DESC;
-```
-
-</details>
-
-<details>
-
-<summary> <code> #6 </code> </summary>
-
-```sql
-SELECT * FROM Person WHERE Age > 20;
-```
-
-</details>
-
-<details>
-
-<summary> <code> #7 </code> </summary>
-
-```sql
-SELECT * FROM Person WHERE Age = 18;
-```
-
-</details>
-
-<details>
-
-<summary> <code> #8 </code> </summary>
-
-```sql
-SELECT * FROM Person WHERE Age < 20 OR Age > 30;
-```
-
-</details>
-
-<details>
-
-<summary> <code> #9 </code> </summary>
-
-```sql
-SELECT * FROM Person WHERE Age != 27;
-```
-
-</details>
-
-<details>
-
-<summary> <code> #10 </code> </summary>
-
-```sql
-SELECT * FROM Person WHERE FavoriteColor != "red";
-```
-
-</details>
-
-<details>
-
-<summary> <code> #11 </code> </summary>
-
-```sql
-SELECT * FROM Person WHERE FavoriteColor != "red" AND FavoriteColor != "blue";
-```
-
-</details>
-
-<details>
-
-<summary> <code> #12 </code> </summary>
-
-```sql
-SELECT * FROM Person WHERE FavoriteColor = "orange" OR FavoriteColor = "green";
-```
-
-</details>
-
-<details>
-
-<summary> <code> #13 </code> </summary>
-
-```sql
-SELECT * FROM Person WHERE FavoriteColor IN ( "orange", "green", "blue" );
-```
-
-</details>
-
-<details>
-
-<summary> <code> #14 </code> </summary>
-
-```sql
-SELECT * FROM Person WHERE FavoriteColor IN ( "yellow", "purple" )
-```
-
-</details>
-
-</details>
-
-## Table - Orders
+In this step, we are going to add massive to the server so we can connect to a database.
 
 ### Instructions
 
-1. Create a table called Orders that records: PersonID, ProductName, ProductPrice, Quantity.
-2. Add 5 Orders to the Orders table.
-    * Make orders for at least two different people.
-    * PersonID should be different for different people.
-3. Select all the records from the Orders table.
-4. Calculate the total number of products ordered.
-5. Calculate the total order price.
-6. Calculate the total order price by a single PersonID.
+* Open the `.env` file and create a variable called `CONNECTION_STRING` that equals the URI connection string from your Heroku database.
+  * Make sure to add `?ssl=true` at end of your connection string.
+* Use `massive` and the `CONNECTION_STRING` to establish a connection.
+* In the `.then` callback from `massive`, set `db` on app to equal the database instance.
+
+<details>
+
+<summary> Detailed Instructions </summary>
+
+<br />
+
+Now that we have a basic node server ready to go, let's modify it to connect to a postgres database. Open the `.env` file and create a variable called `CONNECTION_STRING` that equals the URI connection string from your Heroku database, it should look something like this `postgres://username:password@host/dbname?ssl=true`.
+
+Using the `CONNECTION_STRING`, we can invoke `massive` and pass it in as the first argument. This will return a `promise`.
+
+```
+CONNECTION_STRING=postgres://username:password@host/dbname?ssl=true
+```
+
+```js
+massive( process.env.CONNECTION_STRING );
+```
+
+We'll want to execute some logic when the promise is fulfilled, so let's chain a `.then` to it. Be sure to capture the database instance in the first parameter.
+
+```js
+massive( process.env.CONNECTION_STRING ).then( dbInstance => {} );
+```
+
+Finally, now that we have the `dbInstance`, we can set it onto `app`. Let's have our function return `app.set('db', dbInstance)`.
+
+```js
+massive( process.env.CONNECTION_STRING ).then( dbInstance => app.set('db', dbInstance) );
+```
+
+</details>
 
 ### Solution
 
 <details>
 
-<summary> <code> SQL Solutions </code> </summary>
+<summary> <code> index.js </code> </summary>
 
-<details>
+```js
+const express = require('express');
+const bodyParser = require('body-parser');
+const cors = require('cors');
+const massive = require('massive');
+require('dotenv').config()
 
-<summary> <code> #1 </code> </summary>
+const app = express();
+app.use( bodyParser.json() );
+app.use( cors() );
+massive( process.env.CONNECTION_STRING ).then( dbInstance => app.set('db', dbInstance) );
 
-```sql
-CREATE TABLE Orders ( PersonID integer, ProductName string, ProductPrice float, Quantity integer );
+const port = process.env.PORT || 3000;
+app.listen( port, () => { console.log(`Server listening on port ${port}.`); } );
 ```
 
 </details>
 
-<details>
+## Step 3
 
-<summary> <code> #2 </code> </summary>
+### Summary
 
-```sql
-INSERT INTO Orders ( PersonID, ProductName, ProductPrice, Quantity ) VALUES ( 0, "Product", 12.50, 2 );
-```
+In this step, we are going to create our table and the `.sql` files we'll need to preform operations on our data. The schema for our table will look like:
 
-</details>
-
-<details>
-
-<summary> <code> #3 </code> </summary>
-
-```sql
-SELECT * FROM Orders;
-```
-
-</details>
-
-<details>
-
-<summary> <code> #4 </code> </summary>
-
-```sql
-SELECT SUM(Quantity) FROM Orders;
-```
-
-</details>
-
-<details>
-
-<summary> <code> #5 </code> </summary>
-
-```sql
-SELECT SUM(ProductPrice * Quantity) FROM Orders;
-```
-
-</details>
-
-<details>
-
-<summary> <code> #6 </code> </summary>
-
-```sql
-/* The value of PersonID depends on what IDs you used. Use a valid ID from your table */
-SELECT SUM(ProductPrice * Quantity) FROM Orders WHERE PersonID = 0;
-```
-
-</details>
-
-</details>
-
-## Table - Artist
+* product_id - Serial Primary Key
+* name - varchar(40)
+* description - varchar(80)
+* price - integer
+* image_url - text
 
 ### Instructions
 
-1. Add 3 new Artists to the Artist table. ( It's already created )
-2. Select 10 artists in reverse alphabetical order.
-3. Select 5 artists in alphabetical order.
-4. Select all artists that start with the word "Black".
-5. Select all artists that contain the word "Black".
-
-### Solution 
+* Create a `products` table in your Heroku database.
+* Create a folder called `db`.
+  * Create a `create_product.sql` file.
+  * Create a `read_products.sql` file.
+  * Create a `read_product.sql` file.
+  * Create a `update_product.sql` file.
+  * Create a `delete_product.sql` file.
+* `create_product.sql`:
+  * The SQL should be able to add a new product to the `products` table.
+  * The SQL should have four parameters ( name, description, price, image_url ).
+* `read_products.sql`:
+  * The SQL should be able to return all products from the `products` table.
+* `read_product.sql`:
+  * The SQL should be able to return a specific product from the `products` table.
+  * The SQL should use a parameter to find the product whose `product_id` matches.
+* `update_product.sql`:
+  * The SQL should be able to update the description of a specific product from the `products` table.
+  * The SQL should use a parameter to find the product whose `product_id` matches.
+  * The SQL should use a parameter to update the value of the `description`.
+* `delete_product.sql`:
+  * The SQL should be able to delete a specific product from the `products` table.
+  * The SQL should use a parameter to find the product whose `product_id` matches.
 
 <details>
 
-<summary> <code> SQL Solutions </code> </summary>
+<summary> Detailed Instructions </summary>
 
-<details>
+<br />
 
-<summary> <code> #1 </code> </summary>
+Now that we a method of connecting to our database and have an instance ready to go on `app`, we are ready to start creating the `sql` files that will interact with our database and a `products` table. Let's begin by creating a `products` table that follows the schema in the summary. The final syntax will look like:
 
 ```sql
-INSERT INTO Artist ( Name ) VALUES ( 'artist name' );
+CREATE TABLE products (
+  product_id SERIAL PRIMARY KEY NOT NULL,
+  name varchar(40) NOT NULL,
+  description varchar(80) NOT NULL,
+  price integer NOT NULL,
+  image_url text NOT NULL
+);
+```
+
+Now that we have a `products` table, we'll make five `sql` files. One for `creating` products; one for `reading` all products; one for `reading` a specific product; one for `updating` products; and one for `deleting` products. Let's create a folder called `db`. This is where we'll store our `sql` files that we can execute later using the database instance.
+
+Inside the `db` folder, let's create a file called `create_product.sql`. This `sql` file will be responsible for creating a new product using four parameters. The four parameters are `name`, `description`, `price`, and `image_url`. To add something to a database we use the following syntax: `INSERT INTO Table ( column1, column2 ) VALUES ( value1, value2 );` The values we'll change are `Table`, `column`, and `value`. Since we want to insert into the `products` table, we'll change `Table` to `products`. Since we are updating the `name`, `description`, `price`, and `image_url`, we'll use those as the columns. And since we are using parameters for the values, we'll use `$1`, `$2`, `$3`, and `$4` as the values. The final syntax will look like:
+
+```sql
+INSERT INTO products ( name, description, price, image_url ) VALUES ( $1, $2, $3, $4 );
+```
+
+Now let's move on to `read_products.sql`. Create a file in the `db` folder called `read_products.sql`. This `sql` file will be responsible for reading all products from the database. To read all data from a database we use the following syntax: `SELECT * FROM Table`. Since we are working with the `products` table, we'll change `Table` to `products`. The final syntax will look like:
+
+```sql
+SELECT * FROM products;
+```
+
+Now let's move on to `read_product.sql`. Create a file in the `db` folder called `read_product.sql`. This file will be very similar to `read_products.sql`, however we need to add a where statement so we don't get all the products. We'll want to use a parameter so we can dynamically select a product by `product_id`. We can use a where statement with the following syntax: `WHERE column1 = value`. Since we are looking for a product by ID, we'll change `column1` to `product_id`. And since we are using a parameter for the ID, we'll change `value` to `$1`. The final syntax will look like:
+
+```sql
+SELECT * FROM products WHERE product_id = $1;
+```
+
+Now let's move on to `update_product.sql`. Create a file in the `db` folder called `update_product.sql`. This `sql` file will be responsible for updating the description of a product by ID. To update data from a database we use the following syntax: `UPDATE Table SET column1 = value1 WHERE condition`. Since we are working with the `products` table we'll change `Table` to `products`. Since we are updating the description dynamically we'll set `column1` to `description` and `value1` to `$2`. And since we are updating products by ID we'll set `condition` to `product_id = $1`. The order of `$1` and `$2` doesn't matter as long as you following the same order in the `controller` file. I personally prefer `(id, value)` instead of `(value, id)`. The final syntax will look like:
+
+```sql
+UPDATE products SET description = $2 WHERE product_id = $1;
+```
+
+Now let's move on to `delete_product.sql`. Create a file in the `db` folder called `delete_product.sql`. This `sql` file will be responsible for deleting a specific product by ID. To delete data from a database we use the following syntax: `DELETE FROM Table WHERE condition`. Since we are working with the `products` table, we'll change `Table` to `products`. Since we are deleting by product ID, we'll change `condition` to `product_id = $1`.
+The final syntax will look like:
+
+```sql
+DELETE FROM products WHERE product_id = $1;
 ```
 
 </details>
-
-<details>
-
-<summary> <code> #2 </code> </summary>
-
-```sql
-SELECT * FROM Artist ORDER BY Name Desc LIMIT 10;
-```
-
-</details>
-
-<details>
-
-<summary> <code> #3 </code> </summary>
-
-```sql
-SELECT * FROM Artist ORDER BY Name ASC LIMIT 5;
-```
-
-</details>
-
-<details>
-
-<summary> <code> #4 </code> </summary>
-
-```sql
-SELECT * FROM Artist WHERE Name LIKE 'Black%';
-```
-
-</details>
-
-<details>
-
-<summary> <code> #5 </code> </summary>
-
-```sql
-SELECT * FROM Artist WHERE Name LIKE '%Black%';
-```
-
-</details>
-
-</details>
-
-## Table - Employee
-
-### Instructions
-
-1. List all Employee first and last names only that live in Calgary.
-2. Find the first and last name and birthdate for the youngest employee.
-3. Find the first and last name and birthdate for the oldest employee.
-4. Find everyone that reports to Nancy Edwards (Use the ReportsTo column).
-   * You will need to query the employee table to find the Id for Nancy Edwards
-5. Count how many people live in Lethbridge.
 
 ### Solution
 
 <details>
 
-<summary> <code> SQL Solutions </code> </summary>
-
-<details>
-
-<summary> <code> #1 </code> </summary>
+<summary> <code> CREATE TABLE products </code> </summary>
 
 ```sql
-SELECT FirstName, LastName FROM Employee WHERE City = "Calgary";
+CREATE TABLE products (
+  product_id SERIAL PRIMARY KEY NOT NULL,
+  name varchar(40) NOT NULL,
+  description varchar(80) NOT NULL,
+  price integer NOT NULL,
+  image_url text NOT NULL
+);
 ```
 
 </details>
 
 <details>
 
-<summary> <code> #2 </code> </summary>
+<summary> <code> SQL </code> </summary>
+
+<details>
+
+<summary> <code> create_product.sql </code> </summary>
 
 ```sql
-SELECT FirstName, LastName, Max(BirthDate) FROM Employee;
+INSERT INTO products ( name, description, price, image_url ) VALUES ( $1, $2, $3, $4 );
 ```
 
 </details>
 
 <details>
 
-<summary> <code> #3 </code> </summary>
+<summary> <code> read_products.sql </code> </summary>
 
 ```sql
-SELECT FirstName, LastName, Min(BirthDate) FROM Employee;
+SELECT * FROM products;
 ```
 
 </details>
 
 <details>
 
-<summary> <code> #4 </code> </summary>
+<summary> <code> read_product.sql </code> </summary>
 
 ```sql
-SELECT * FROM Employee WHERE ReportsTo = 2;
+SELECT * FROM products WHERE product_id = $1;
 ```
 
 </details>
 
 <details>
 
-<summary> <code> #5 </code> </summary>
+<summary> <code> update_product.sql </code> </summary>
 
 ```sql
-SELECT COUNT(*) FROM Employee WHERE City = "Lethbridge";
+UPDATE products SET description = $2 WHERE product_id = $1;
+```
+
+</details>
+
+<details>
+
+<summary> <code> delete_product.sql </code> </summary>
+
+```sql
+DELETE FROM products WHERE product_id = $1;
 ```
 
 </details>
 
 </details>
 
-## Table - Invoice 
+## Step 4
+
+### Summary
+
+In this step, we will create a `products_controller.js` file to will handle the logic of interacting with the database.
 
 ### Instructions
 
-1. Count how many orders were made from the USA.
-2. Find the largest order total amount.
-3. Find the smallest order total amount.
-4. Find all orders bigger than $5.
-5. Count how many orders were smaller than $5.
-6. Count how many orders were in CA, TX, or AZ (use IN).
-7. Get the average total of the orders.
-8. Get the total sum of the orders.
+* Create a `products_controller.js` file.
+* Use `module.exports` to export an object with five methods.
+  * `create`, `getOne`, `getAll`, `update`, and `delete`.
+* Inside of each method, access the database instance.
+* Inside of each method, use the correct SQL file.
+  * `create` -> `create_product.sql`.
+  * `getOne` -> `read_product.sql`.
+  * `getAll` -> `read_products.sql`.
+  * `update` -> `update_product.sql`.
+  * `delete` -> `delete_product.sql`.
+* Don't worry about the parameter(s) in this step.
+* `create`, `update`, and `delete` should send status 200 on success and status 500 on failure.
+* `getOne` should send status 200 and the product on success and status 500 on failure.
+* `getAll` should send status 200 and the products on success and status 500 on failure.
+
+<details>
+
+<summary> Detailed Instructions </summary>
+
+<br />
+
+Now that we have all the `sql` files we'll need to interact with our database, let's create a controller that will execute the `sql`. Create a file called `products_controller.js`. In this file, use `module.exports` to export an `object` with five methods. All methods should capture `req`, `res`, and `next` and create a variable for the database instance off of `req.app`.
+
+```js
+module.exports = {
+  create: ( req, res, next ) => {
+    const dbInstance = req.app.get('db');
+  },
+
+  getOne: ( req, res, next ) => {
+    const dbInstance = req.app.get('db');
+  },
+
+  getAll: ( req, res, next ) => {
+    const dbInstance = req.app.get('db');
+  },
+
+  update: ( req, res, next ) => {
+    const dbInstance = req.app.get('db');
+  },
+
+  delete: ( req, res, next ) => {
+    const dbInstance = req.app.get('db');
+  }
+};
+```
+
+Now that our methods have access to the `dbInstance` we can execute our sql files by chaining on `.file_name`. For example, if I wanted to execute `read_product` I would use `dbInstance.read_product()`. Knowing this we can execute our sql files in every method. Chain a `.then` to use `res` to send status 200 and chain a `.catch` to use `res` to send status 500. The `getOne` and `getAll` method should also send `product` and `products` on success.
+
+```js
+module.exports = {
+  create: ( req, res, next ) => {
+    const dbInstance = req.app.get('db');
+
+    dbInstance.create_product()
+      .then( () => res.status(200).send() )
+      .catch( () => res.status(500).send() );
+  },
+
+  getOne: ( req, res, next ) => {
+    const dbInstance = req.app.get('db');
+
+    dbInstance.read_product()
+      .then( product => res.status(200).send( product ) )
+      .catch( () => res.status(500).send() );
+  },
+
+  getAll: ( req, res, next ) => {
+    const dbInstance = req.app.get('db');
+
+    dbInstance.read_products()
+      .then( products => res.status(200).send( products ) )
+      .catch( () => res.status(500).send() );
+  },
+
+  update: ( req, res, next ) => {
+    const dbInstance = req.app.get('db');
+
+    dbInstance.update_product()
+      .then( () => res.status(200).send() )
+      .catch( () => res.status(500).send() );
+  },
+
+  delete: ( req, res, next ) => {
+    const dbInstance = req.app.get('db');
+
+    dbInstance.delete_product()
+      .then( () => res.status(200).send() )
+      .catch( () => res.status(500).send() );
+  }
+};
+```
+
+We'll worry about how to use parameters after we configure our routes. For right now, this is all we need to do.
+
+</details>
 
 ### Solution
 
 <details>
 
-<summary> <code> SQL Solutions </code> </summary>
+<summary> <code> products_controller.js </code> </summary>
+
+```js
+module.exports = {
+  create: ( req, res, next ) => {
+    const dbInstance = req.app.get('db');
+
+    dbInstance.create_product()
+      .then( () => res.status(200).send() )
+      .catch( () => res.status(500).send() );
+  },
+
+  getOne: ( req, res, next ) => {
+    const dbInstance = req.app.get('db');
+
+    dbInstance.read_product()
+      .then( product => res.status(200).send( product ) )
+      .catch( () => res.status(500).send() );
+  },
+
+  getAll: ( req, res, next ) => {
+    const dbInstance = req.app.get('db');
+
+    dbInstance.read_products()
+      .then( products => res.status(200).send( products ) )
+      .catch( () => res.status(500).send() );
+  },
+
+  update: ( req, res, next ) => {
+    const dbInstance = req.app.get('db');
+
+    dbInstance.update_product()
+      .then( () => res.status(200).send() )
+      .catch( () => res.status(500).send() );
+  },
+
+  delete: ( req, res, next ) => {
+    const dbInstance = req.app.get('db');
+
+    dbInstance.delete_product()
+      .then( () => res.status(200).send() )
+      .catch( () => res.status(500).send() );
+  }
+};
+```
+</details>
+
+## Step 5
+
+### Summary
+
+In this step, we will create endpoints that will call the methods on our controller. We will also require our controller in `index.js`.
+
+### Instructions
+
+* Create the following endpoints: ( `request method`, `url`, `controller method` )
+  * `GET` - `/api/products` - `getAll`.
+  * `GET` - `/api/product/:id` - `getOne`.
+  * `PUT` - `/api/product/:id?desc=...` - `update`.
+  * `POST` - `/api/product` - `create`.
+  * `DELETE` - `/api/product/:id` - `delete`.
+
+### Solution
 
 <details>
 
-<summary> <code> #1 </code> </summary>
+<summary> <code> index.js </code> </summary>
 
-```sql
-SELECT Count(*) FROM Invoice WHERE BillingCountry = 'USA';
+```js
+const express = require('express');
+const bodyParser = require('body-parser');
+const cors = require('cors');
+const massive = require('massive');
+require('dotenv').config()
+const products_controller = require('./products_controller');
+
+const app = express();
+app.use( bodyParser.json() );
+app.use( cors() );
+massive( process.env.CONNECTION_STRING ).then( dbInstance => app.set('db', dbInstance) );
+
+app.post( '/api/product', products_controller.create );
+app.get( '/api/products', products_controller.getAll );
+app.get( '/api/product/:id', products_controller.getOne );
+app.put( '/api/product/:id', products_controller.update );
+app.delete( '/api/product/:id', products_controller.delete );
+
+const port = process.env.PORT || 3000;
+app.listen( port, () => { console.log(`Server listening on port ${port}.`); } );
 ```
 
 </details>
 
+
+## Step 6
+
+### Summary
+
+In this step, we'll modify the controller to use parameters or the request body.
+
+### Instructions
+
+* Open `products_controller.js`.
+* Modify `update` to use `id` from `req.params` and `desc` from `req.query`.
+* Modify `getOne` to use `id` from `req.params`.
+* Modify `delete` to use `id` from `req.params`.
+* Modify the `create` to use `name`, `description`, `price`, and `imageurl` from the request body.
+
 <details>
 
-<summary> <code> #2 </code> </summary>
+<summary> Detailed Instructions </summary>
 
-```sql
-SELECT Max(total) FROM Invoice;
+<br />
+
+Now that we know how our routes are configured, we can update our controller to reflect those changes. We'll modify `update` to use `id` from the request parameters and the `desc` from the request query. We'll modify `getOne` to use `id` from the request parameters. We'll modify `delete` to use `id` from the request parameters. And we'll modify `create` to use `name`, `description`, `price` and `imageurl` from the request body. When adding parameters to sql, all you have to do is pass in an array as the first argument and then the element(s) in the array map to `$1`, `$2`, etc... For example: `dbInstance.create_product([ name, description, price, imageurl ])`, name is `$1`, description is `$2`, price is `$3`, and imageurl is `$4`.
+
+```js
+module.exports = {
+  create: ( req, res, next ) => {
+    const dbInstance = req.app.get('db');
+    const { name, description, price, imageurl } = req.body;
+
+    dbInstance.create_product([ name, description, price, imageurl ])
+      .then( () => res.status(200).send() )
+      .catch( () => res.status(500).send() );
+  },
+
+  getOne: ( req, res, next ) => {
+    const dbInstance = req.app.get('db');
+    const { params } = req;
+
+    dbInstance.read_product([ params.id ])
+      .then( product => res.status(200).send( product ) )
+      .catch( () => res.status(500).send() );
+  },
+
+  getAll: ( req, res, next ) => {
+    const dbInstance = req.app.get('db');
+
+    dbInstance.read_products()
+      .then( products => res.status(200).send( products ) )
+      .catch( () => res.status(500).send() );
+  },
+
+  update: ( req, res, next ) => {
+    const dbInstance = req.app.get('db');
+    const { params, query } = req;
+
+    dbInstance.update_product([ params.id, query.desc ])
+      .then( () => res.status(200).send() )
+      .catch( () => res.status(500).send() );
+  },
+
+  delete: ( req, res, next ) => {
+    const dbInstance = req.app.get('db');
+    const { params } = req;
+
+    dbInstance.delete_product([ params.id ])
+      .then( () => res.status(200).send() )
+      .catch( () => res.status(500).send() );
+  }
+};
 ```
 
 </details>
 
+### Solution
+
 <details>
 
-<summary> <code> #3 </code> </summary>
+<summary> <code> products_controller.js </code> </summary>
 
-```sql
-SELECT Min(total) FROM Invoice;
+```js
+module.exports = {
+  create: ( req, res, next ) => {
+    const dbInstance = req.app.get('db');
+    const { name, description, price, imageurl } = req.body;
+
+    dbInstance.create_product([ name, description, price, imageurl ])
+      .then( () => res.status(200).send() )
+      .catch( () => res.status(500).send() );
+  },
+
+  getOne: ( req, res, next ) => {
+    const dbInstance = req.app.get('db');
+    const { params } = req;
+
+    dbInstance.read_product([ params.id ])
+      .then( product => res.status(200).send( product ) )
+      .catch( () => res.status(500).send() );
+  },
+
+  getAll: ( req, res, next ) => {
+    const dbInstance = req.app.get('db');
+
+    dbInstance.read_products()
+      .then( products => res.status(200).send( products ) )
+      .catch( () => res.status(500).send() );
+  },
+
+  update: ( req, res, next ) => {
+    const dbInstance = req.app.get('db');
+    const { params, query } = req;
+
+    dbInstance.update_product([ params.id, query.desc ])
+      .then( () => res.status(200).send() )
+      .catch( () => res.status(500).send() );
+  },
+
+  delete: ( req, res, next ) => {
+    const dbInstance = req.app.get('db');
+    const { params } = req;
+
+    dbInstance.delete_product([ params.id ])
+      .then( () => res.status(200).send() )
+      .catch( () => res.status(500).send() );
+  }
+};
 ```
 
 </details>
 
-<details>
+## Step 7
 
-<summary> <code> #4 </code> </summary>
+### Summary
 
-```sql
-SELECT * FROM Invoice WHERE Total > 5;
-```
+In this step, we'll test to make sure all the endpoint are working.
 
-</details>
+### Instructions
 
-<details>
+* Import the provided `postman_collection` into postman and make sure all the tests pass.
 
-<summary> <code> #5 </code> </summary>
+### Solution
 
-```sql
-SELECT COUNT(*) FROM Invoice WHERE Total < 5;
-```
+<img src="https://github.com/DevMountain/sql-massive-node/blob/solution/readme-assets/1.png" />
 
-</details>
+## Black Diamond
 
-<details>
-
-<summary> <code> #6 </code> </summary>
-
-```sql
-SELECT Count(*) FROM Invoice WHERE BillingState in ('CA', 'TX', 'AZ');
-```
-
-</details>
-
-<details>
-
-<summary> <code> #7 </code> </summary>
-
-```sql
-SELECT AVG(Total) FROM Invoice;
-```
-
-</details>
-
-<details>
-
-<summary> <code> #8 </code> </summary>
-
-```sql
-SELECT SUM(Total) FROM Invoice;
-```
-
-</details>
-
-</details>
+* Create a React front end to interact with your app.
+* Use express static to serve up your React files from a build folder.
+* Create a single view that can insert, read, update, and delete products.
+* Create a second view that just reads the products and displays them in a pretty way (like Jane.com or amazon).
 
 ## Contributions
 
@@ -509,4 +713,3 @@ If you see a problem or a typo, please fork, make the necessary changes, and cre
 <p align="center">
 <img src="https://devmounta.in/img/logowhiteblue.png" width="250">
 </p>
-
